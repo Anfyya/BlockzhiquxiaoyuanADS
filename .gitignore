@@ -1,0 +1,5 @@
+*.dylib
+*.o
+*.dSYM/
+.DS_Store
+CODEx_CHANGELOG.md
