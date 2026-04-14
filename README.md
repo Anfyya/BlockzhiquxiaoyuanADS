@@ -2,6 +2,12 @@
 
 `BlockzhiquxiaoyuanADS` is a minimal Objective-C runtime plugin that blocks several ad entry points used by the target app and builds directly into an iOS `dylib`.
 
+In addition to killing the splash / interstitial ad entry points, the dylib also disables the gyroscope / accelerometer / device-motion pipeline at runtime so that "shake to jump" ad pages can never read motion data and therefore cannot launch third-party apps or the App Store. The block covers:
+
+- `CMMotionManager` — all `start*Updates` variants become no-ops, every `is*Available` / `is*Active` property returns `NO`, and the `gyroData` / `deviceMotion` / `accelerometerData` / `magnetometerData` readers return `nil`.
+- `UIAccelerometer` — the deprecated delegate path used by older ad SDKs is also neutralised.
+- `UIResponder` — the `motionBegan:/motionEnded:/motionCancelled:` shake events are swallowed as a safety net.
+
 ## Files
 
 - `FuckAds.m`: the hook source.
